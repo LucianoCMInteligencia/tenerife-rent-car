@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel de Administración</title>
+  <link rel="stylesheet" href="../src/styles.css" />
+</head>
+<body>
+  <h1>🔐 Panel de Administración</h1>
+  
+  <!-- Panel de login -->
+  <div id="login-panel">
+    <h2>Iniciar Sesión</h2>
+    <label>Usuario: <input type="text" id="usuario" autocomplete="username"></label><br>
+    <label>Contraseña: <input type="password" id="password" autocomplete="current-password"></label><br>
+    <button id="btn-login">Entrar</button>
+    <button id="btn-volver">⬅ Volver al inicio</button>
+    <p id="login-error" style="color:red;"></p>
+  </div>
+
+  <!-- Panel admin -->
+  <div id="admin-panel" style="display:none;">
+    <h2>📋 Reservas registradas</h2>
+    <div id="reservas-lista"></div>
+
+    <!-- Botones funcionales -->
+    <div class="admin-buttons">
+      <button id="btn-exportar">📥 Exportar CSV</button>
+      <button id="btn-eliminar-todo">🗑 Eliminar todas</button>
+      <button id="btn-ver-logs">📄 Ver actividad</button>
+      <button id="btn-recargar">🔄 Recargar lista</button>
+      <button id="btn-logout">Cerrar sesión</button>
+      <button id="btn-volver-inicio">🏠 Volver al inicio</button>
+    </div>
+
+    <!-- Contenedor para mostrar logs -->
+    <div id="logs-panel" style="display:none;">
+      <h3>📊 Registro de actividad</h3>
+      <ul id="logs-lista"></ul>
+    </div>
+  </div>
+
+  <script src="../src/script.js"></script>
+</body>
+</html>

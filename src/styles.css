@@ -1,0 +1,404 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+    color: #333;
+}
+
+/* Encabezado */
+header {
+    text-align: center;
+    background: #004d99;
+    color: white;
+    padding: 20px;
+}
+
+header h1 span {
+    color: #ffcc00;
+}
+
+/* Cuerpo principal */
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Lista de coches */
+.car-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.car-list label {
+    background: #e6f0ff;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.car-list label:hover {
+    background: #cce0ff;
+}
+
+input[type="checkbox"] {
+    transform: scale(1.2);
+}
+/* Página de detalles */
+.car-details {
+    text-align: center;
+}
+
+.car-details img {
+    max-width: 300px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.options label {
+    background: #e6f7e6;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.options label:hover {
+    background: #c2f0c2;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #004d99;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+}
+/* Formulario de reserva */
+.reservation-form {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f0f8ff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.reservation-form h3 {
+    margin-bottom: 15px;
+    color: #004d99;
+}
+
+.reservation-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.reservation-form input[type="number"],
+.reservation-form input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.reservation-form button {
+    margin-top: 15px;
+    padding: 12px;
+    background: #004d99;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+.reservation-form button:hover {
+    background: #003366;
+}
+
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e6ffe6;
+    border: 1px solid #66cc66;
+    border-radius: 8px;
+    font-weight: bold;
+}
+/* Campos adicionales del formulario */
+.reservation-form input[type="email"],
+.reservation-form input[type="tel"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.confirmation {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    color: #856404;
+    font-weight: bold;
+}
+/* Panel de administración */
+.admin-panel {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fffaf0;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.reservas-lista {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.reserva-card {
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.reserva-card strong {
+    color: #004d99;
+}
+
+.reserva-card button {
+    margin-top: 10px;
+    padding: 6px 10px;
+    background: #cc0000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.reserva-card button:hover {
+    background: #990000;
+}
+#btn-exportar {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: #009933;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#btn-exportar:hover {
+    background: #006622;
+}
+
+// 🔄 Recargar lista manualmente
+const btnRecargar = document.getElementById("btn-recargar");
+if (btnRecargar) {
+  btnRecargar.addEventListener("click", () => {
+    mostrarReservas();
+  });
+}
+
+// 📥 Exportar reservas a CSV
+const btnExportar = document.getElementById("btn-exportar");
+if (btnExportar) {
+  btnExportar.addEventListener("click", () => {
+    const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+    if (reservas.length === 0) {
+      alert("No hay reservas para exportar.");
+      return;
+    }
+
+    const headers = ["Vehículo", "Días", "Cliente", "Email", "Teléfono", "Precio Total"];
+    const rows = reservas.map(r => [r.coche, r.dias, r.nombre, r.email, r.telefono, r.precioTotal]);
+    const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "reservas.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+}
+
+// 🗑 Eliminar todas las reservas
+const btnEliminarTodo = document.getElementById("btn-eliminar-todo");
+if (btnEliminarTodo) {
+  btnEliminarTodo.addEventListener("click", () => {
+    if (confirm("¿Estás seguro de que quieres eliminar todas las reservas?")) {
+      localStorage.removeItem("reservas");
+      logActivity("eliminación total", "admin");
+      mostrarReservas();
+    }
+  });
+}
+
+// 📄 Ver actividad (logs)
+const btnVerLogs = document.getElementById("btn-ver-logs");
+const logsPanel = document.getElementById("logs-panel");
+const logsLista = document.getElementById("logs-lista");
+
+if (btnVerLogs && logsPanel && logsLista) {
+  btnVerLogs.addEventListener("click", () => {
+    const logs = JSON.parse(localStorage.getItem("logs")) || [];
+    logsLista.innerHTML = "";
+
+    if (logs.length === 0) {
+      logsLista.innerHTML = "<li>No hay actividad registrada.</li>";
+    } else {
+      logs.forEach(log => {
+        const item = document.createElement("li");
+        item.textContent = `${log.timestamp} — ${log.user} hizo: ${log.action}`;
+        logsLista.appendChild(item);
+      });
+    }
+
+    logsPanel.style.display = "block";
+  });
+}
+
+
+
+
+
+/* === Estilo mejorado para Panel de Administración === */
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #e0f7fa, #ffffff);
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #00796b;
+  margin-bottom: 30px;
+}
+
+#login-panel, #admin-panel {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 25px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+#login-panel h2, #admin-panel h2 {
+  margin-top: 0;
+  color: #004d40;
+  text-align: center;
+}
+
+label {
+  display: block;
+  margin: 15px 0 5px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #00796b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #004d40;
+}
+
+.admin-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.admin-buttons button {
+  flex: 1 1 45%;
+}
+
+.reserva-card {
+  background-color: #f1f8e9;
+  border: 1px solid #c5e1a5;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.reserva-card p {
+  margin: 5px 0;
+}
+
+#login-error {
+  margin-top: 10px;
+  font-size: 0.9em;
+}
+
+#logs-panel {
+  margin-top: 30px;
+  background-color: #e3f2fd;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+#logs-lista {
+  list-style: none;
+  padding-left: 0;
+}
+
+#logs-lista li {
+  padding: 5px 0;
+  border-bottom: 1px solid #ccc;
+  font-size: 0.9em;
+}
